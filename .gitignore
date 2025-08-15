@@ -1,0 +1,32 @@
+# Build artifacts
+build/
+*.o
+*.a
+*.so
+*.exe
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Temporary files
+/tmp/
+*.tmp
+*.swp
+*.swo
+*~
+
+# Editor files
+.vscode/
+.idea/
+*.orig
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Interface layer temporary files
+/tmp/interface_driver_*
+/tmp/interrupt_info_*
+/tmp/driver_simulator_socket

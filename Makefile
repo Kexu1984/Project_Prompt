@@ -14,10 +14,11 @@ OBJECTS = $(OBJDIR)/interface_layer.o
 # Targets
 LIBRARY = $(OBJDIR)/libinterface.a
 EXAMPLE = $(OBJDIR)/test_interface
+ADVANCED_EXAMPLE = $(OBJDIR)/advanced_test
 
 .PHONY: all clean test run-test
 
-all: $(LIBRARY) $(EXAMPLE)
+all: $(LIBRARY) $(EXAMPLE) $(ADVANCED_EXAMPLE)
 
 $(OBJDIR):
 	mkdir -p $(OBJDIR)
@@ -29,6 +30,9 @@ $(LIBRARY): $(OBJECTS)
 	ar rcs $@ $^
 
 $(EXAMPLE): $(EXAMPLEDIR)/test_interface.c $(LIBRARY) | $(OBJDIR)
+	$(CC) $(CFLAGS) $(INCLUDES) $< -L$(OBJDIR) -linterface -o $@
+
+$(ADVANCED_EXAMPLE): $(EXAMPLEDIR)/advanced_test.c $(LIBRARY) | $(OBJDIR)
 	$(CC) $(CFLAGS) $(INCLUDES) $< -L$(OBJDIR) -linterface -o $@
 
 clean:
@@ -57,8 +61,16 @@ run-test: $(EXAMPLE)
 
 help:
 	@echo "Available targets:"
-	@echo "  all       - Build library and examples"
-	@echo "  clean     - Remove build artifacts"
-	@echo "  test      - Run test (requires manual simulator start)"
-	@echo "  run-test  - Run test with automatic simulator management"
-	@echo "  help      - Show this help message"
+	@echo "  all          - Build library and examples"
+	@echo "  clean        - Remove build artifacts"
+	@echo "  test         - Run basic test (requires manual simulator start)"
+	@echo "  run-test     - Run basic test with automatic simulator management"
+	@echo "  advanced     - Run advanced multi-device test"
+	@echo "  help         - Show this help message"
+
+advanced: $(ADVANCED_EXAMPLE)
+	@echo "Starting advanced multi-device test..."
+	@echo "This requires UART and Timer simulators to be running:"
+	@echo "  Terminal 1: python3 python/extended_devices.py uart 0"
+	@echo "  Terminal 2: python3 python/extended_devices.py timer 1"
+	@echo "Then run: $(ADVANCED_EXAMPLE)"
